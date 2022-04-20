@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/header :: header"></th:block>
+    <meta charset="UTF-8">
+    <title>Kasowanie dostępu logowania</title>
+</head>
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <form method="post" th:action="@{/admin/user/{id}/user-delete (id=${user.getId()})}">
+        <h2>Potwierdź skasowanie konta logowania dla użytkownika: <span
+                th:text="${user.getFirstName().concat(' ').concat(user.getLastName())}"></span>
+        </h2>
+        <div class="float-left">
+            <input class="btn btn-primary" type="submit" value="Potwierdź">
+            <a class="btn btn-primary" th:href="@{/admin/user/{id} (id=${user.getId()})}">Powrót</a>
+        </div>
+    </form>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
+</body>
+</html>

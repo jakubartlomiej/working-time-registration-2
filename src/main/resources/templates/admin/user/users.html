@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:include="fragments/header :: header"></th:block>
+    <title>Dodaj użytkownika</title>
+</head>
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <h2>Lista pracowników:</h2>
+    <form method="get" th:action="@{/admin/user}">
+        <label for="search">Szukaj:</label>
+        <input type="text" id="search" name="search">
+        <input type="submit" value="Szukaj">
+    </form>
+    <span th:if="${searchValue}!=null">
+        Wynik wyszukiwania dla '<b><span th:text="${searchValue}"></span></b>'
+        <a th:href="@{/admin/users}">Usuń filtr</a>
+    </span>
+    <table class="table table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th class="text-center" >ID</th>
+            <th class="text-center" >Imie nazwisko</th>
+            <th class="text-center" >Szczegóły</th>
+        </tr>
+        </thead>
+        <tr th:each="employee: ${employeesList}">
+            <td class="text-center" th:text="${employee.getId()()}"></td>
+            <td class="text-center"
+                th:text="${employee.getFirstName().concat(' ').concat(employee.getLastName())}"></td>
+            <td class="text-center"><a th:href="@{/admin/user/{id}(id = ${employee.getId()})}">
+                <button type="button" class="btn btn-info">Edytuj</button>
+            </a></td>
+        </tr>
+    </table>
+</div>
+<br>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/header :: header"></th:block>
+    <meta charset="UTF-8">
+    <title>Dodaj użytkownika</title>
+</head>
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <br>
+    <h2>Nowy pracownik</h2>
+    <br>
+    <form method="post" th:object="${user}" th:action="@{/admin/add-user-with-login}">
+        <div th:if="${#fields.hasErrors('global')}">
+            <span th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error"></span>
+        </div>
+        <div class="form-group row">
+            <label th:for="*{firstName}" class="col-sm-2 col-form-label">Imie:</label>
+            <div class="col-sm-10">
+                <input th:field="*{firstName}" class="form-control">
+                <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label th:for="*{lastName}" class="col-sm-2 col-form-label">Nazwisko:</label>
+            <div class="col-sm-10">
+                <input class="form-control" th:field="*{lastName}">
+                <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" th:for="*{cardNumber}">Numer karty:</label>
+            <div class="col-sm-10">
+                <input class="form-control" th:field="*{cardNumber}" id="cardNumber">
+                <span class="error" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" th:for="*{login}">Login: </label>
+            <div class="col-sm-10">
+                <input class="form-control" th:field="*{login}">
+                <span class="error" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" th:for="*{password}">Hasło: </label>
+            <div class="col-sm-10">
+                <input class="form-control" type="password" th:field="*{password}">
+                <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="roleName">Uprawnienia: </label>
+            <div class="col-sm-10">
+                <select class="form-control" name="roleName" id="roleName">
+                    <option value="ROLE_ADMIN">Administrator</option>
+                    <option value="ROLE_USER">Użytkownik</option>
+                </select>
+            </div>
+        </div>
+        <div class="float-right">
+            <input class="btn btn-primary" type="submit" value="Dodaj użytkownika">
+        </div>
+    </form>
+</div>
+<br>
+<br>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</body>
+<script type="text/javascript">
+    //function blocking auto submit after card number scanning
+    $('#cardNumber').keydown(function (e) {
+        if (e.keyCode === 13) {
+            $('#cardNumber').focus();
+            return false;
+        }
+    });
+</script>
+</html>

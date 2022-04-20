@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="fragments/header :: header"></th:block>
+    <meta charset="UTF-8">
+    <title>Informacje o użytkowniku</title>
+</head>
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="container">
+    <br>
+    <h2>Edycja danych:</h2>
+    <br>
+    <div class="form-section">
+        <form method="post" th:object="${user}" th:action="@{/admin/user-with-login/{id} (id=${user.id})}">
+            <div th:if="${#fields.hasErrors('global')}">
+                <span th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error"></span>
+            </div>
+            <div class="form-group row">
+                <label th:for="id" class="col-sm-2 col-form-label">ID:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{id}" class="form-control" readonly>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="firstName" class="col-sm-2 col-form-label">Imie:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{firstName}" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="lastName" class="col-sm-2 col-form-label">Nazwisko:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{lastName}" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="cardNumber" class="col-sm-2 col-form-label">Numer karty:</label>
+                <div class="col-sm-10">
+                    <input th:field="*{cardNumber}" class="form-control">
+                    <span class="error" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label th:for="isActive" class="col-sm-2 col-form-label">Karta aktywna:</label>
+                <div class="col-sm-10">
+                    <span th:if="*{isActive()}">TAK</span>
+                    <span th:unless="*{isActive()}">NIE</span>
+                </div>
+            </div>
+                <div class="form-group row">
+                    <label th:for="login" class="col-sm-2 col-form-label">Login:</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{login}" class="form-control">
+                        <span class="error" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label th:for="roles" class="col-sm-2 col-form-label">Uprawnienia:</label>
+                    <div class="col-sm-10">
+                  <ul th:each="role : ${user.getRoles()}">
+                        <li th:text="${role.getSimplifiedRoleName()}"></li>
+                    </ul>
+                    </div>
+                </div>
+            <div class="options">
+                <div class="optionsDesc">
+                    <p>Dodatkowe opcje: </p>
+                </div>
+                <div class="optionsButton">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group"
+                             th:if="${user.active}">
+                            <a th:href="@{/admin/user/{id}/card-disabled (id = ${user.id})}">
+                                <button type="button" class="btn btn-dark">Zablokuj kartę</button>
+                            </a>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="First group"
+                             th:unless="${user.active}">
+                            <a th:href="@{/admin/user/{id}/card-enabled (id = ${user.id})}">
+                                <button type="button" class="btn btn-dark">Odblokuj kartę</button>
+                            </a>
+                        </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Third group">
+                                <a th:href="@{/admin/user/{id}/password (id = ${user.id})}">
+                                    <button type="button" class="btn btn-dark">Zresetuj hasło</button>
+                                </a>
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Third group"
+                                 th:if="${user.getRoles().size()} < 2">
+                                <a th:href="@{/admin/user/{id}/role-grant (id = ${user.id})}">
+                                    <button type="button" class="btn btn-dark">Nadaj uprawnienia</button>
+                                </a>
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Third group"
+                                 th:if="!${user.getRoles().isEmpty()}">
+                                <a th:href="@{/admin/user/{id}/role-delete (id = ${user.id})}">
+                                    <button type="button" class="btn btn-dark">Zabierz uprawnienia</button>
+                                </a>
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Third group">
+                                <a th:href="@{/admin/user/{id}/user-delete (id = ${user.id})}">
+                                    <button type="button" class="btn btn-dark">Kasuj konto logowania</button>
+                                </a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-right">
+                <input class="btn btn-primary" type="submit" value="Zapisz">
+                <a class="btn btn-primary" th:href="@{/admin/users}">Powrót</a>
+            </div>
+        </form>
+    </div>
+    <br>
+</div>
+<footer th:replace="fragments/footer :: footer"></footer>
+<div th:replace="fragments/scripts :: scripts"></div>
+</body>
+</html>
